@@ -1,0 +1,29 @@
+    <div> <!-- class="row" -->
+		<!-- <div class="col-md-1 col-sm-1 col-xs-1"></div> -->
+		<div><!-- class="col-md-10 col-sm-10 col-xs-12" -->
+	   		<table ng-repeat="item in editUserRoleJsonData" class="table table-striped table-bordered bootstrap-datatable datatable">
+       		 <tr>
+       		 <td>
+       		 <div>       	
+       		 <b> 
+       		 <span>{{item.sceneTitle}}</span></b>	
+       		 </div>
+			</td>
+	         </tr>
+       		 <tr>
+       		 <td>
+       		 <div style="height:250px;overflow-y:auto;">
+       		 <table class="table table-striped table-bordered bootstrap-datatable datatable">
+       		 <tr ng-repeat="scene in item.sceneDescription">       		 
+       		 <td ng-if="scene.character != ''"><b>{{scene.character}} :</b> {{scene.whisper}}</td>       		 
+       		 <td ng-if="scene.character == ''"><i>{{scene.stageDirection}}</i></td>
+       		 </tr>
+       		 </table>
+       		 </div>
+       		 </td>
+       		 </tr>       		       		        		
+  			</table>       		        		      		         		     		         		         		     
+		</div>
+		<!-- <div class="col-md-1 col-sm-1 col-xs-1">			
+	</div> -->
+	</div>

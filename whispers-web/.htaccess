@@ -1,0 +1,61 @@
+LimitRequestBody 51200
+
+RewriteEngine On
+
+DirectoryIndex index.html
+
+RewriteCond %{REQUEST_URI} /de$
+RewriteRule .* /en [R=307,L]
+
+RewriteCond %{REQUEST_URI} /de/products$
+RewriteRule .* /en/products [R=307,L]
+
+RewriteCond %{REQUEST_URI} /de/walletshowcase$
+RewriteRule .* /en/walletshowcase [R=307,L]
+
+RewriteCond %{REQUEST_URI} /de/exchangeshowcase$
+RewriteRule .* /en/exchangeshowcase [R=307,L]
+
+# language redirection german to /de, all others to /en
+RewriteCond %{HTTP:Accept-Language} ^de.*$ [NC]
+RewriteCond %{REQUEST_URI} /^/$/
+RewriteRule ^$ /de [R=301,L]
+RewriteCond %{REQUEST_URI} /^/$/
+RewriteRule ^$ /en [R=301,L]
+
+# redirect bots into snapshot directory, homepage is english
+RewriteCond %{QUERY_STRING} ^/?_escaped_fragment_=$
+RewriteRule ^$ /en?_escaped_fragment_= [R=301,L]
+RewriteCond %{REQUEST_URI} !/snapshots/
+RewriteCond %{QUERY_STRING} _escaped_fragment_=
+RewriteRule ^(.*)$ /snapshots/$1.html [L]
+
+# API requests
+RewriteCond %{REQUEST_URI} !exchange.php
+RewriteRule gateway/(.*) exchange.php/gateway/$1 [L]
+# RewriteRule (.*) /maintenance.json [L]
+
+# everything else, except assets and php scripts - to angular
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !index
+RewriteCond %{REQUEST_URI} !/snapshots/
+RewriteCond %{REQUEST_URI} !.*\.(css|js|html|png|gif|map|php|json|pdf)
+RewriteCond %{REQUEST_URI} /(de|en)(/(faq|support|whatisbitcoin|pressReleases|services|confirm|confirmChange|unsubscribe|passwordForgotten|passwordRecovery|deleteaccount|account|orders|profile|contact))?$
+### switch comments for maintenance ###
+Header set X-Frame-Options SAMEORIGIN
+RewriteRule (.*) index-main.html [L]
+# RewriteRule (.*) /maintenance.html [L]
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} /(de|en)/exchangeshowcase
+RewriteRule .* index-exchange.html 
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} /(de|en)/walletshowcase
+RewriteRule .* index-wallet.html 
+
+ErrorDocument 404 /error.html

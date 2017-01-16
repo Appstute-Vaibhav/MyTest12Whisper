@@ -1,0 +1,82 @@
+<form role="form" name="feedbackForm" id="feedbackForm"  ng-submit="feedbackQuestion(feedbackForm)" ng-controller="FeedbackCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading">Add Question</div>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>Question*:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input class="form-control" name="question" id="question" ng-model="question" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>						    
+						    <a href="" ng-click="addSubQuestion(opt);" class="btn btn-info">Add Sub-Question</a>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="feedbackForm.question.$dirty && feedbackForm.question.$invalid">
+    <small class="error" 
+        ng-show="feedbackForm.question.$error.required">
+        Please enter question.
+    </small>
+    </div>			    		  	    				  	
+				  		</div>				  			
+				  					  		
+				  	<div class="row table_row_top_margin" ng-repeat="opt in mainQuestionOptions">				  							  		
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Option {{$index + 1}}:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<div>
+            					<input class="form-control" id="mainOpt{{$index+1}}" type="text" ng-model="opt.optionValue"/>
+        					 </div>							
+							</div>																		
+    				</div>			
+    				<div id="space-for-buttons"></div>					
+						<div class="row table_row_top_margin ng-scope" style="margin-left:225px;">
+						<a href="" ng-click="addNewField();" class="btn btn-info">Add Option</a>					
+						</div>
+    				
+    				<div ng-repeat="subQuestion in subQuestions">
+    				
+    					<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group">
+				  	          		<label>Sub Question {{$index + 1}}:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input class="form-control" ng-model="$parent.subQuestion[$index]" ng-change="checkEmpty($index);" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    			    																				    						    						    		  	
+				  		</div>
+				  		<div class="row table_row_top_margin" ng-repeat="option in subOptions[$index]">				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Option {{$index + 1}}:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<div>
+            					<input class="form-control" type="text" ng-model="$parent.option[$index]"/>            									  
+            				   <!-- <a href="" ng-click="addOption(subOptions);" class="btn btn-info">Add Option in</a> -->
+            				 </div>							
+							</div>																		
+                          </div>
+                          
+                          <div id="space-for-buttons"></div>					
+						<div class="row table_row_top_margin ng-scope" style="margin-left:225px;">        					
+						 <a href="" ng-click="addOption($index,option);" class="btn btn-info">Add Option</a>					
+						</div>
+				  		</div>
+				  		<div class="row table_row_top_margin text-center">
+					<!-- <button class="btn btn-info" ng-click="backtoPage();">Back</button> -->
+					<div></div>
+					<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:-10px;">
+					<button id="btnSave" class="btn btn-info">Save</button>
+					<a class="btn btn-info" ng-hide="hideReset" role="button" ng-click="reset(feedbackForm);">Reset</a>
+					</div>					
+				</div>
+				
+    					</div>
+    					</div>
+						 
+					
+			</form>	

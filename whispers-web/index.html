@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="whispers">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="fragment" content="!"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" content="@DESCRIPTION@"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">		
+		<title>@TITLE@</title>	
+			
+		<style>
+		.error-container{
+		color:red;
+		}		
+		.numberCircle {
+    	border-radius: 50%;    	
+    	width: 22px;
+    	height: 22px;    	   
+    	background: #fff;
+    	border: 2px solid #666;
+    	color: #666;
+   	 	text-align: center;    
+	}
+	
+	/* .width-250{
+		width:250% !important;
+	} */
+	
+	.sbtn{
+		adding: 10px 16px;
+		font-size: 0px;
+		line-height: 1.33;
+		border-radius: 6px;
+	}
+		</style>
+		
+<style>
+input.ng-pristine + ul#strength {
+    display:none;
+}
+
+ul#strength {
+    display:inline;
+    list-style:none;
+    margin:0;
+    margin-left:15px;
+    padding:0;
+    vertical-align:2px;
+}
+.point:last {
+    margin:0 !important;
+}
+.point {
+    background:#DDD;
+    border-radius:2px;
+    display:inline-block;
+    height:5px;
+    margin-right:1px;
+    width:20px;
+}
+/* #footer {
+    position:fixed;
+    bottom:5px;
+} */
+</style>
+		
+		<style>
+#veil {
+	position: absolute;
+	top: -110px;
+	left: -100px;
+	height: 400%;
+	width: 120%;
+	cursor: not-allowed;
+	filter: alpha(opacity=60);
+	opacity: 0.6;		
+	z-index:6;	
+ 	background: #000000 url() no-repeat center;
+}
+#feedLoading {
+	position: absolute;
+	top:50%;
+	left:50%;
+	text-align: center;
+	font-size: 4em;
+	color:white;
+	z-index:6;
+	text-shadow: 2px 2px 2px #021124;
+}		
+		</style>
+		
+		<style>
+		#active{
+		background-color: rgb(66, 139, 202);
+		padding-bottom: 0%; 
+		border-radius: 3px;"
+		}		
+		</style>
+		
+		
+		
+		<link href="components/bootstrap-3.2.0/css/bootstrap.min.css" 		 rel="stylesheet" media="screen"/>
+		<link href="components/font-awesome-4.1.0/css/font-awesome.min.css"  rel="stylesheet" type="text/css"/>
+		<link href="components/angular-plugin/css/ngDialog.css" 			 rel="stylesheet" media="all">
+		<link href="components/angular-plugin/css/ngDialog-theme-default.css"rel="stylesheet" media="all">
+		<link href="components/angular-plugin/css/ngDialog-theme-plain.css"  rel="stylesheet" media="all"> 
+		<link href="components/angular-plugin/css/ng-table.css"              rel="stylesheet" media="all"> 
+		<link href="components/angular-plugin/css/angular-growl.css"         rel="stylesheet" media="all">    	      	  
+   	    <link href="components/jquery/jquery-ui.min.css"					 rel="stylesheet" media="all" />   	   
+		<link href="components/angular-plugin/css/angular-toggle-switch.css" rel="stylesheet" media="all">   
+		<link href="components/angular-plugin/css/angular-toggle-switch-bootstrap.css" rel="stylesheet" media="all">    
+		
+		<script src="components/jquery/jquery-1.11.1.min.js"></script>
+		<script src="components/jquery/jquery-ui.min.js"></script>				
+		
+		<script src="components/angular-1.3.4/angular.min.js"></script>
+		<script src="components/angular-1.3.4/angular-resource.min.js"></script>
+		<script src="components/angular-1.3.4/angular-route.min.js"></script>
+		<script src="components/angular-1.3.4/angular-sanitize.min.js"></script>
+		<script src="components/angular-1.3.4/angular-cookies.min.js"></script>
+
+		<script src="components/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+		<script src="components/angular-ui/ui-bootstrap-tpls-0.11.0.min.js"></script>
+		<script src="components/angular-plugin/js/ngDialog.js"></script>
+		<script src="components/angular-plugin/js/ng-table.js"></script>
+		<script src="components/angular-plugin/js/angular-growl.js"></script>
+		<script src="components/angular-plugin/js/angular-toggle-switch.min.js"></script>
+		<script src="components/angular-plugin/js/angular-confirm.js"></script>
+		
+		<script src="components/ckeditor.js"></script>
+ 
+		<script src="@BRANCH@/app_branch.js"></script>
+		<script src="@BRANCH@/l10n/label-locale-en.js"></script>
+		<script src="@BRANCH@/l10n/messages-locale_en.js"></script>							
+				
+		<script src="@BRANCH@/controllers/MainCtrl.js"></script>
+		<script src="@BRANCH@/controllers/LoginCtrl.js"></script>
+		<script src="@BRANCH@/controllers/RegisterUserCtrl.js"></script>
+		<script src="@BRANCH@/controllers/AdminDashboardCtrl.js"></script>
+		<script src="@BRANCH@/controllers/DramaturgListCtrl.js"></script>		
+		<script src="@BRANCH@/controllers/UserListCtrl.js"></script>
+		<script src="@BRANCH@/controllers/SceneListCtrl.js"></script>
+		<script src="@BRANCH@/controllers/SponserCardListCtrl.js"></script>
+		<script src="@BRANCH@/controllers/CommentsCtrl.js"></script>
+		<script src="@BRANCH@/controllers/FeedbackCtrl.js"></script>
+		<script src="@BRANCH@/controllers/WinnerListCtrl.js"></script>
+		<script src="@BRANCH@/controllers/ReportListCtrl.js"></script>
+		<script src="@BRANCH@/controllers/UserReportCtrl.js"></script>		
+		<script src="@BRANCH@/controllers/FeedbackReportCtrl.js"></script>		
+		<script src="@BRANCH@/controllers/TAndCCtrl.js"></script>
+		<script src="@BRANCH@/controllers/activateUserCtrl.js"></script>		
+				
+		<script src="@BRANCH@/services/transportService.js"></script>   
+		<script src="@BRANCH@/services/notify.js"></script>
+		
+		<script src="@BRANCH@/filter/Constants.js"></script>     
+		
+		<!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/> -->
+		<link href="@BRANCH@/stylesheets/12Whispers.css" rel="stylesheet">
+		
+	</head>	
+	<body ng-controller="MainCtrl">	
+	         <!-- Require for Growl Notification --> 
+	          <div growl></div>
+	
+	<div id="wrapper">	
+			<div class="pageHead">		 				
+				<nav ng-show="showNav" class="navbar navbar-inverse" role="banner">									
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span> 
+							<span class="icon-bar"></span> 
+							<span class="icon-bar"></span> 
+							<span class="icon-bar"></span>
+						</button>
+						<div>
+						<a class="navbar-brand" ng-href=""> 
+							<img alt="" src="@BRANCH@/images/tinylogo.png" class="nav-logo img-resposive">							
+						</a>						
+						</div>						
+					</div>									
+					<div ng-hide="hideNav" class="collapse navbar-collapse navbar-right">					
+							<ul class="nav navbar-nav">		
+								
+							 <li id="active" class="dropdown userManagement" ng-show="validadmin">
+		                         <a ng-href="#master" class="dropdown-toggle" data-toggle="dropdown">User Management <i class="fa fa-angle-down"></i></a>
+		                         <ul class="dropdown-menu">
+		                           <li ng-show="validadmin" class="playWriters">
+		                                 <a ng-href="#adminDashboard">Play Writers</a></li>
+		                               <li class="dramaturgs"><a ng-href="#dramaturg">Dramaturgs</a></li>
+		                               <li class="users"><a ng-href="#users">Users</a></li>		                                 
+		                               </ul>
+		                     </li>      	                          
+							 <li class="sceneManagement" ng-show="validadmin">
+		                     <a ng-href="#manageScenes">Scene Management</a>
+		                     </li>		                          	                         
+							 <li class="winner" ng-show="validadmin"><a ng-href="#winner">Winner</a></li>
+							 <li class="sponsorCard" ng-show="validadmin"><a ng-href="#sponsorcard">Sponsor Card</a></li>
+							 <li class="feedback" ng-show="validadmin"><a ng-href="#feedback">Feedback</a></li>
+							 <li class="tc" ng-show="validadmin"><a ng-href="#tandC">T&C</a></li>
+							 <li class="reports" ng-show="validadmin"><a ng-href="#reports">Reports</a></li>                   
+
+	                        <!-- <li ng-show="validDramaturg">
+		                         <a ng-href="#">HOME</a>
+	                         </li> -->
+	                         
+	                        <!-- <li ng-show="validPlayWriter">
+		                         <a ng-href="#">HOME</a>
+	                         </li> -->
+	                         <li class="sceneManagement" ng-show="validPlayWriter"><a ng-href="#manageScenes">Scene Submitted By Me</a></li>
+	                         <li class="users" ng-show="validPlayWriter"><a ng-href="#users">View 12 Whispers Submitted By Users</a></li>	                          	                        	                         
+	                         
+		                     <!-- <li ng-hide="valid" class="condensed-xs" ng-include="'partials/login.html'"></li> -->	                   	                     	                             
+	                         																						
+						</ul>
+						<ul class="nav navbar-nav">
+						<li ng-show="validUser">
+	                         <p style="color:white;margin-top:-30px;" id="logUser"></p>
+	                         <!-- <button class="btn btn-primary" style="margin-top:-5px;">Profile</button> -->
+	                         <a ng-click="logOut();" style="margin-left:50%;margin-top:-10px;" class="navbar-brand" ng-href="#"> 							
+							<img alt="" src="@BRANCH@/images/exit.png" class="nav-logo img-resposive">
+						</a><!-- <a ng-click="logOut();" ng-href="#" >LOGOUT</a> --></li>
+						</ul>
+					</div>
+				</nav>
+			</div><!-- PageHead Ends -->
+			<div class="bodyContent">							
+				<div class="row removeHtml" ng-hide="valid">								
+					<div class="col-md-1 col-sm-1 col-xs-1"></div>					
+					<div class="col-md-9 col-sm-9 col-xs-9">	
+						<div ng-include="'@BRANCH@/partials/teaser.html'"></div>								 						 
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-2"></div>									 		    			    				   
+				</div>
+						<div class="row removeHtml" style="margin-top:40px;" ng-hide="valid">
+					<div class="col-md-1 col-sm-1 col-xs-1"></div>					
+					<div class="col-md-10 col-sm-10 col-xs-10">												
+						<div ng-include="'@BRANCH@/partials/login.html'"></div>							
+					</div>
+					<div class="col-md-1 col-sm-1 col-xs-1">					
+					</div>			 		    			    				    
+				</div>		
+				
+				<div class="row">
+				<div class="col-md-1 col-sm-1 col-xs-1"></div>
+					<div class="col-md-10 col-sm-10 col-xs-10">	
+						<ng-view>
+						</ng-view>
+					</div>
+					<div class="col-md-1 col-sm-1 col-xs-1"></div>
+				</div>	  			
+			</div>			
+		</div><!-- wrapper Ends -->		     
+		<div id="footer">	
+			<div class="container">
+				<footer class="midnight-blue">	        
+				        <div class="row">
+				            <div class="col-xs-6">
+				                 &copy; All Rights Reserved.
+				            </div>
+				            <div class="col-xs-6" style="float:right;" ng-show="validadmin">
+				                {{ clock | date:'medium'}} &nbsp;&nbsp;&nbsp;&nbsp;Day Light Saving Mode : 
+				                <toggle-switch  on-label="ON" off-label="OFF" ng-model="switchStatus" ng-change="updateDayLightSavingMode();"><toggle-switch>
+				            </div>
+				        </div>	        
+				</footer><!--footer ends-->
+			</div>
+		</div>
+	</body>
+</html>

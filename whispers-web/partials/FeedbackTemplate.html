@@ -1,0 +1,147 @@
+<div id="veil" ng-show="isLoading"></div>
+<div id="feedLoading" ng-show="isLoading">
+<center>
+<img src='releases/master/images/loading.gif' style="height:160px;"/>
+</center>
+</div>
+<div class="row" ng-hide="showToFeedback">
+<div class="col-md-1 col-sm-1 col-xs-1">				
+	</div>
+		<div class="col-md-10 col-sm-10 col-xs-10">
+		<div style="display:inline-flex;">
+		<span>
+		<input type="text" style="margin-top:8px;" placeholder="Search" ng-model="serachText" />
+		</span>
+		<h2 id="textName" style="margin-left:210px;margin-top:-2px;"></h2>
+		<span>
+		<input type="button" style="margin-left:295px;" class="btn btn btn-info" ng-click="addFeedbackByAdmin();" value="Add New"/>		
+		</span>
+		</div>		
+			   <table ng-table="tableParams"  class="table table-striped table-bordered bootstrap-datatable datatable">
+			   <thead>
+			   <tr>
+			   <th>Main Question</th>
+			   <th>Sub Question</th>
+			   <th>Answer Options</th>
+			   <th></th>
+			   </tr>
+			   </thead>			   			   			  
+       				 <tr ng-repeat="item in $data | filter:serachText">            				
+            			<td sortable="'question'">{{item.mainQuestion}}</td>
+            			<td>{{item.question}}</td>
+            				<td>
+            				<div>
+            				<table class="table">
+            				<tr>
+            				<td ng-repeat="i in item.feedbackQuestionOptions">
+            				<b>{{$index + 1}} )</b> {{i.optionValue}}
+            				</td>
+            				</tr>
+            				</table>
+            				</div>		
+            				</td>
+            				<td>
+								<a href="" class="btn btn btn-info" ng-click="temp();editTableRow(item.id,item.parentQuestionId);">Edit</a>														
+								<a style="font-size:10px;" ng-click="deleteFeedback(item.id);" class="btn btn-info btn-lg">								
+          						<span class="glyphicon glyphicon-trash"></span> 
+        							</a>															
+								</td>																				                         
+       				 </tr>
+       				 <tr ng-show="emptiness">
+       				 <td></td>
+       				 <td>No data available</td>
+       				 <td></td>
+       				 <td></td>
+       				 </tr>       				 
+       		 </table>        		         		         		      		 
+		</div>
+		<div class="col-md-1 col-sm-1 col-xs-1">
+	</div>
+	</div>
+
+<div class="row" ng-show="showToFeedback">
+		<div class="col-md-1 col-sm-1  col-xs-0"></div>	
+		<div class="col-md-10 col-sm-10  col-xs-12">	  
+		
+		<form ng-controller="FeedbackCtrl"><a style="margin-left:825px;margin-bottom:6px;" ng-show="showCancel" class="btn btn-info" role="button" ng-click="showList();">Back</a></form>
+		
+		  	<form role="form" name="feedbackForm" id="feedbackForm" ng-controller="FeedbackCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading" id="sName"></div>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>Question*:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input class="form-control" name="question" id="question" ng-model="question" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>						    
+						    <a href="" id="first" ng-click="addSubQuestion();" class="btn btn-info">Add Sub-Question</a>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="feedbackForm.question.$dirty && feedbackForm.question.$invalid">
+    <small class="error" 
+        ng-show="feedbackForm.question.$error.required">
+        Please enter question.
+    </small>
+    </div>			    		  	    				  	
+				  		</div>
+				  				
+				  	<div class="row table_row_top_margin" ng-repeat="opt in mainQuestionOptions">
+				  								  				  			
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Option {{$index + 1}}:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<div>
+            					<input class="form-control" type="text" id="mainOpt{{$index+1}}" ng-model="opt.optionValue"/>
+        					 </div>							
+							</div>																		
+    				</div>			
+    				<div id="space-for-buttons"></div>					
+						<div class="row table_row_top_margin ng-scope" style="margin-left:225px;">
+						<a href="" ng-click="addField(opt);" class="btn btn-info">Add Option</a>					
+						</div>
+    				<div ng-repeat="subQuestion in subQuestions">				
+    					<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group">
+				  	          		<label>Sub Question {{$index + 1}}:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input class="form-control" id="subQues{{index + 1}}" ng-model="$parent.subQuestion[$index]" ng-change="checkEmpty($index);" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>	    																				    						    						    		  	
+				  		</div>
+				  		<div class="row table_row_top_margin" ng-repeat="option in subOptions[$index]">		
+				  				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Option {{$index + 1}}:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<div>
+            						<input class="form-control" type="text" id="subOpt{{$index + 1}}" ng-model="$parent.option[$index]"/>            									  
+            					 </div>					
+							</div>																		
+                          </div>
+                          
+                          <div id="space-for-buttons"></div>					
+						<div class="row table_row_top_margin ng-scope" style="margin-left:225px;">        					
+						 <a href="" id="second" ng-click="addOption($index,option);" class="btn btn-info">Add Option</a>					
+						</div>
+				  		</div>
+				  		<div class="row table_row_top_margin text-center">
+					<!-- <button class="btn btn-info" ng-click="backtoPage();">Back</button> -->
+					<div></div>
+					<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:-10px;">
+					<button id="btnSave" class="btn btn-info" ng-click="feedbackQuestion(feedbackForm)">Save</button>
+					<a class="btn btn-info" id="resetB" ng-hide="hideReset" role="button" ng-click="reset(feedbackForm);">Reset</a>
+					</div>					
+				</div>				
+    					</div>
+    					</div>								
+			</form>	
+		</div>	
+		<div class="col-md-1 col-sm-1  col-xs-0"></div> 
+	</div>

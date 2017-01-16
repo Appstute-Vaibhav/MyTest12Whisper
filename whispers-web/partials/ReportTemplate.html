@@ -1,0 +1,60 @@
+<div class="row">
+		<div class="col-md-1 col-sm-1  col-xs-0"></div>	
+		<div class="col-md-10 col-sm-10  col-xs-12">	 
+		<div>
+		<h2 id="textName" style="margin-left:400px;margin-top:-2px;"></h2>		
+		</div> 
+		  	<form role="form" name="reportForm" id="reportForm" ng-controller="ReportListCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading">Reports</div>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>Select Report:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    	<select id="report" name="report" ng-model="report.report" class="form-control" required>
+					    			<option value="">Please Select</option>
+					    			<option value="scene">Play wise/Scene wise</option>					    							    		
+					    		</select>
+					    	</div>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="reportForm.report.$dirty && reportForm.report.$invalid">
+    <small class="error" 
+        ng-show="reportForm.report.$error.required">
+        Please select report.
+    </small>
+    </div>			    		  	    
+				  		</div>		
+				  		<div class="row table_row_top_margin">				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Report Type:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<select id="type" name="type" ng-model="report.type" class="form-control" required>
+					    			<option value="">Please Select</option>
+					    			<option value="user">User</option>
+					    			<option value="feedback">Feedback</option>					    							    		
+					    		</select>							</div>
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="reportForm.type.$dirty && reportForm.type.$invalid">
+    <small class="error" 
+        ng-show="reportForm.type.$error.required">
+        Please select report type.
+    </small>
+    </div>	
+    </div>			
+    			  	<div class="row table_row_top_margin text-center">
+					<!-- <button class="btn btn-info" ng-click="backtoPage();">Back</button> -->
+					<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:-5px;">
+					<a ng-show="showBack" class="btn btn-info" ng-href="#" role="button">Back</a>
+					<button class="btn btn-info" ng-click="getReport(reportForm)">Submit</button>
+					<button class="btn btn-info" ng-click="reset();">Reset</button>
+					</div>
+				</div>
+			</form>	
+		</div>	
+		<div class="col-md-1 col-sm-1  col-xs-0"></div> 
+	</div>  

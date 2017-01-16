@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<project basedir="." default="deploy">
+
+    <available file="../.git" type="dir" property="git.present"/>
+
+	<property file="l10n/config.properties"/>
+
+    <target name="checkTarget">
+        <fail unless="target" message="target not defined" />
+    </target>
+	
+    <property name="target" value="/home/anka/DEPLOY"></property>
+    
+    
+    
+    
+    <target name="git.branch" description="Store git branch in ${repository.branch}" if="git.present">
+        <exec executable="git" outputproperty="git.branch"
+              failifexecutionfails="true" errorproperty="">
+            <arg value="branch"/>
+        </exec>
+        <condition property="repository.branch" value="${git.branch}" else="unknown">
+            <and>
+                <isset property="git.branch"/>
+                <length string="${git.branch}" trim="yes" length="0" when="greater"/>
+            </and>
+        </condition>
+        <script language="javascript">
+            <![CDATA[
+                lines = project.getProperty("repository.branch").split("\n");
+                for (var i = 0; i < lines.length; i++) {
+                    parts = lines[i].split(" ");
+                    if (parts[0] == '*') {
+                        branch = "releases/" + parts[1].trim();
+                        project.setProperty("branch", branch);
+                        project.setProperty("startComment", "<!--");
+                        project.setProperty("endComment", "-->");
+                        break;
+                    }
+                }
+            ]]>
+        </script>
+        
+        <delete file="app_branch.js"/>
+        
+     <!--  Delete Deploy Folder -->   
+       <delete includeEmptyDirs="true">
+             <fileset dir="${target}" includes="*"/>
+        </delete>
+        
+        
+        <copy file="app.js" tofile="app_branch.js">
+            <filterchain>
+                <replacetokens>
+                    <token key="BRANCH" value="${branch}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+             classpath="build/compiler.jar"/>
+
+    <target name="compile" depends="git.branch">
+
+        <path id="ui.js.fileset">
+            <fileset dir=".">
+                <include name="app_branch.js"/>
+            </fileset>
+            <fileset dir="controllers">
+                <include name="*.js"/>
+            </fileset>
+            <fileset dir="directive">
+                <include name="*.js"/>
+            </fileset>
+            <fileset dir="l10n">
+                <include name="*.js"/>
+            </fileset>
+            <fileset dir="services">
+                <include name="*.js"/>
+            </fileset>
+            <fileset dir="filter">
+                <include name="*.js"/>
+            </fileset>
+        	<fileset dir="jsons">
+        	       <include name="*.json"/>
+        	 </fileset>
+        	        	
+        	
+        </path>
+
+        <path id="app.js.fileset">
+            <path refid="ui.js.fileset"/>
+        </path>
+
+        <jscomp compilationLevel="simple" debug="false" languageIn='ECMASCRIPT5' warning="quiet" output="${target}/${branch}/whispers.js">
+            <externs dir="components/angular-1.3.4">
+                <file name="angular.js"/>
+            </externs>
+            <path refid="app.js.fileset"/>
+        </jscomp>
+    </target>
+
+    <target name="deployBase" depends="checkTarget,git.branch" description="copy base application to /web">
+
+      
+  
+        
+        <copy todir="${target}/components">
+            <fileset dir="components"/>
+        </copy>
+
+        <copy todir="${target}/${branch}/stylesheets">
+            <fileset dir="stylesheets"/>
+            <filterchain>
+                <replacetokens>
+                    <token key="BRANCH" value="${branch}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <copy todir="${target}/${branch}/images">
+            <fileset dir="images"/>
+        </copy>
+
+        <copy todir="${target}/${branch}/partials">
+            <fileset dir="partials"/>
+            <filterchain>
+                <replacetokens>
+                    <token key="BRANCH" value="${branch}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    	
+        <copy todir="${target}/${branch}">
+            <fileset dir=".">
+                <include name="*.ico"/>
+                <include name="*.png"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${target}">
+            <fileset dir=".">
+                <include name=".htaccess"/>
+            </fileset>
+        </copy>
+
+        <delete file="${target}/index.html"/>
+
+    </target>
+
+    <target name="clean" depends="checkTarget">
+        <delete dir="${target}"/>
+        <delete file="./app_branch.js"/>
+    </target>
+
+    <target name="deploy" depends="compile,deployBase" description="production deployment">
+        <copy file="index.html" tofile="${target}/index.html">
+            <filterchain>
+                <replacetokens>
+                    <token key="BRANCH" value="${branch}"/>
+                    <token key="TITLE" value="${title_whispers}"/>
+                    <token key="DESCRIPTION" value="${description_whispers}"/>
+                    <token key="PRODUCTION_START" value=""/>
+                    <token key="PRODUCTION_END" value=""/>
+                    <token key="DEBUG_START" value="${startComment}"/>
+                    <token key="DEBUG_END" value="${endComment}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+
+    <target name="deployDebug" depends="deployBase" description="debug deployment">
+        <copy file="app_branch.js" tofile="${target}/${branch}/app_branch.js" />
+        <copy todir="${target}/${branch}/l10n">
+            <fileset dir="l10n"/>
+        </copy>
+        <copy todir="${target}/${branch}/services">
+            <fileset dir="services"/>
+        </copy>
+        <copy todir="${target}/${branch}/directive">
+            <fileset dir="directive"/>
+        </copy>
+        <copy todir="${target}/${branch}/filter">
+            <fileset dir="filter"/>
+        </copy>
+        <copy todir="${target}/${branch}/controllers">
+            <fileset dir="controllers"/>
+        	<filterchain>
+                <replacetokens>
+                    <token key="BRANCH" value="${branch}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    	<copy todir="${target}/${branch}/jsons">
+    	            <fileset dir="jsons"/>
+    	 </copy>
+    	
+        <copy file="index.html" tofile="${target}/index.html">
+            <filterchain>
+                <replacetokens>
+                    <token key="BRANCH" value="${branch}"/>
+                    <token key="TITLE" value="${title_whispers}"/>
+                    <token key="DESCRIPTION" value="${description_whispers}"/>
+                    <token key="PRODUCTION_START" value="${startComment}"/>
+                    <token key="PRODUCTION_END" value="${endComment}"/>
+                    <token key="DEBUG_START" value=""/>
+                    <token key="DEBUG_END" value=""/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+</project>

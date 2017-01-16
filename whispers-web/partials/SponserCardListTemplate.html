@@ -1,0 +1,167 @@
+<div id="veil" ng-show="isLoading"></div>
+<div id="feedLoading" ng-show="isLoading">
+<center>
+<img src='releases/master/images/loading.gif' style="height:160px;"/>
+</center>
+</div>
+<div class="row" ng-hide="sponsorCardForm">
+		<div class="col-md-1 col-sm-1 col-xs-1"></div>
+		<div class="col-md-10 col-sm-10 col-xs-10">
+		<div style="display:inline-flex;">
+		<span>
+		<input type="text" style="margin-top:8px;" placeholder="Search" ng-model="serachText" />
+		</span>
+		<h2 id="textName" style="margin-left:180px;margin-top:-2px;"></h2>
+		<span style="margin-left:270px;">		
+		<input type="button" class="btn btn btn-info" ng-click="addSponsorCard();" value="Add New"/>
+		</span>
+		</div>
+			
+			   <table ng-table="tableParams"  class="table table-striped table-bordered bootstrap-datatable datatable">			   
+       				 <tr ng-repeat="item in $data | filter:serachText">            				
+            				<td data-title="'Date'" sortable="'dateUploaded'">{{item.dateUploaded}}</td>
+            				<td data-title="'Name'">{{item.sponsoredBy}}</td>            				
+            				<td>
+								<input type="button" class="btn btn btn-info" ng-click="editTableRow(item.id);" value="Edit"/>
+									<a style="font-size:10px;" class="btn btn-info btn-lg" role="button" ng-click="deleteSponsorCard(item.id);">
+          <span class="glyphicon glyphicon-trash"></span> 
+        </a>
+							</td>						                            
+       				 </tr>
+       				 <tr ng-show="emptiness">
+       				 <td></td>
+       				 <td>No data available</td>
+       				 <td></td>
+       				 </tr>       				 
+       		  </table>        		         		         		       		  
+		</div>
+		<div class="col-md-1 col-sm-1 col-xs-1">
+	</div>
+	</div>
+	
+<div class="row" ng-show="sponsorCardForm">
+		<div class="col-md-1 col-sm-1  col-xs-0"></div>	
+		<div class="col-md-10 col-sm-10  col-xs-12">
+		<form ng-controller="SponserCardListCtrl"><a style="margin-left:825px;margin-bottom:6px;" ng-show="showCancel" class="btn btn-info" role="button" role="form" ng-click="showList(sponsorForm);">Back</a></form>	  
+		  	<form role="form" name="sponsorForm" id="sponsorForm"  ng-submit="saveSponsorCard(sponsorForm)" ng-controller="SponserCardListCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading" id="sName"></div>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>Name:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input maxlength="100" class="form-control" name="name" id="name" ng-model="sponsorCard.sponsoredBy" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sponsorForm.name.$dirty && sponsorForm.name.$invalid">
+    <small class="error" 
+        ng-show="sponsorForm.name.$error.required">
+        Please enter name
+    </small><!-- 
+    <small class="error" 
+        ng-show="sponsorForm.name.$error.pattern">
+        Please enter valid name
+    </small> -->
+    </div>			    		  	    
+				  		</div>
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>Description:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input class="form-control" name="description" id="description" ng-model="sponsorCard.cardDescription" type="text" class="form-control" autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    <!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sponsorForm.description.$dirty && sponsorForm.description.$invalid">    
+    <small class="error" 
+        ng-show="sponsorForm.name.$error.pattern">
+        Please enter valid description
+    </small>
+    </div>	 -->		    		  	    
+				  		</div>
+				  		<div class="row table_row_top_margin">
+				  		<script>
+				  		function change(){
+				  			$('#pickDate').hide();
+				  			if($('#dateUploaded').val() == ''){
+				  				$('#dateUploaded').attr('class','form-control ng-valid-pattern ng-touched ng-dirty ng-valid-parse ng-invalid ng-invalid-required');				  			
+				  			}else{
+				  				$('#dateUploaded').attr('class','form-control ng-valid-pattern ng-touched ng-dirty ng-valid-parse ng-valid ng-valid-required');
+				  			}				  			
+				  		}				  		
+				  		</script>
+				  						  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Date:</label>
+				    		</div>			
+				    		<div class="col-md-3 col-sm-6 col-xs-12">
+								<input onchange="change();" readonly='true' name="dateUploaded" id="dateUploaded" type="text" ng-model="sponsorCard.dateUploaded" class="input-xlarge form-control">																
+							</div>					    						
+    	<div class="error-container col-md-3 col-sm-6 col-xs-12"><small id="pickDate" ng-show="pickDate">Please select date</small></div>    
+				  		</div>
+				  			 <div class="row table_row_top_margin">				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Web URL:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input maxlength="100" class="form-control" ng-pattern="/^http:\/\/|(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/"  name="webUrl" id="webUrl" ng-model="sponsorCard.sponsorURI" required autofocus type="text" class="form-control">
+							</div>
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sponsorForm.webUrl.$dirty && sponsorForm.webUrl.$invalid">
+    <small class="error" 
+        ng-show="sponsorForm.webUrl.$error.required">
+        Please enter web url
+    </small>
+    <small class="error" 
+        ng-show="sponsorForm.webUrl.$error.pattern">
+        Please enter valid url
+    </small> 
+    </div>				
+    </div>
+    <div class="row table_row_top_margin">				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<label>Upload Image:</label>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input onchange="angular.element(this).scope().addImage()" id="img" type="file" accept="image/*" />    													
+							</div>
+							<span id="cardErrorMsg" name="cardErrorMsg" style="color:red;"></span>
+							<div class="col-sm-2 text-right">							
+    						<table style="border:hidden;">
+        					<tr>
+            				<td>
+                			<div>
+                    			<img style="max-width:400px;" id="imagePreview0" src="" alt="" /> 
+                			</div>
+            				</td>
+        					</tr>
+    						</table>
+    <!-- <button ng-click="addImage()" type="button">ADD</button> -->
+</div>					</div>
+						
+						  	<div class="row table_row_top_margin text-center">
+				  	<div>							  		    		
+				    		</div>	    	
+				    		<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:-10px;">					
+					<button class="btn btn-info" id="btnSave">Save</button>
+					<a id="resetForm" class="btn btn-info" role="button" ng-click="reset();" ng-hide="hideReset">Reset</a>					
+							</div>										
+				</div>				
+			</form>	
+		</div>	
+		<div class="col-md-1 col-sm-1  col-xs-0"></div> 
+	</div>
+<script>
+$("#dateUploaded").datepicker({
+						showOn: "both",					
+						dateFormat:'yy-mm-dd',     
+						minDate:new Date()
+					});
+</script>	
+

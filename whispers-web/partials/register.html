@@ -1,0 +1,203 @@
+<div class="row">
+		<div class="col-md-1 col-sm-1  col-xs-0"></div>	
+		<div class="col-md-10 col-sm-10  col-xs-12">	  
+		  	<form role="form" name="registerForm" id="registerForm"  ng-submit="registerUser(registerForm)" ng-controller="CpmasterDesignTempCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading">User Registration</div>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>First Name*:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input class="form-control" ng-pattern="/^[a-zA-Z]+$/" name="firstName" id="firstName" placeholder="First Name" ng-model="user.firstName" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.firstName.$dirty && registerForm.firstName.$invalid">
+    <small class="error" 
+        ng-show="registerForm.firstName.$error.required">
+        First Name Require.
+    </small>
+    <small class="error" 
+        ng-show="registerForm.firstName.$error.pattern">
+        Please enter valid first name.
+    </small>
+    </div>			    		  	    
+				  		</div>
+				  		<div class="row table_row_top_margin">				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Last Name*:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input class="form-control" ng-pattern="/^[a-zA-Z]+$/" name="lastName" id="lastName" placeholder="Last Name" ng-model="user.lastName" required autofocus type="text" class="form-control">
+							</div>
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.lastName.$dirty && registerForm.lastName.$invalid">
+    <small class="error" 
+        ng-show="registerForm.lastName.$error.required">
+        Last Name Require.
+    </small>
+    <small class="error" 
+        ng-show="registerForm.lastName.$error.pattern">
+        Please enter valid last name.
+    </small>
+    </div>				
+						</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>DOB*:</label>
+				    		</div>			
+				    		<div class="col-md-3 col-sm-6 col-xs-12">
+								<input name="dateOfBirth" id="dateOfBirth" placeholder="Birth Date" ng-model="user.dateOfBirth" type="text" class="input-xlarge form-control" required autofocus>								
+							</div>					    
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.dateOfBirth.$dirty && registerForm.dateOfBirth.$invalid">
+    <small class="error" 
+        ng-show="registerForm.dateOfBirth.$error.required">
+        Date of birth require.
+    </small></div>
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Contact Number*:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input ng-minlength=10 ng-maxlength=10 name="mobileNumber" ng-pattern="/^[0-9]+$/" id="mobileNumber" placeholder="Contact Number" ng-model="user.mobileNumber" type="text" class="form-control" required autofocus>
+							</div>
+												<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.mobileNumber.$dirty && registerForm.mobileNumber.$invalid">
+    <small class="error" 
+        ng-show="registerForm.mobileNumber.$error.required">
+        Contact number require.
+    </small>
+    <small class="error" 
+            ng-show="registerForm.mobileNumber.$error.minlength">
+            Your contact number is required to be 10 digits
+    </small>
+    <small class="error" 
+            ng-show="registerForm.mobileNumber.$error.maxlength">
+            Please enter valid contact number.            
+    </small>
+    <small class="error" 
+        ng-show="registerForm.mobileNumber.$error.pattern">
+        Please enter numbers only.
+    </small>
+    </div>				    	
+				  		</div>
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-6 col-xs-12">
+				  				<label>Gender*:</label>
+				  			</div>
+				  			<div class="col-md-3 col-sm-6 col-xs-12">
+					    		<select id="gender" name="gender" ng-model="user.gender" class="form-control" required>
+					    			<option value="">Please Select</option>
+					    			<option value="Male">Male</option>
+					    			<option value="Female">Female</option>
+					    			<option value="Other">Other</option>
+					    		</select>
+					    	</div>
+					    	<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.gender.$dirty && registerForm.gender.$invalid">
+      <small class="error" 
+             ng-show="registerForm.gender.$error.required">
+             Please select gender.
+      </small>
+      </div>
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Email Id*:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="email" id="email" placeholder="Email Id" ng-model="user.email" required autofocus  type="email" class="form-control">
+							</div>		
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.email.$dirty && registerForm.email.$invalid">
+      <small class="error" 
+             ng-show="registerForm.email.$error.required">
+             Your email is required.
+      </small>
+      <small class="error" 
+             ng-show="registerForm.email.$error.email">
+             That is not a valid email. Please input a valid email.
+      </small>
+    </div>		    	
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Username*:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input ng-pattern="/^[a-zA-Z0-9]+$/" id="userName" name="userName" placeholder="User Name" required autofocus ng-model="user.userName" type="text" class="form-control">
+							</div>
+										<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.userName.$dirty && registerForm.userName.$invalid">
+      <small class="error" 
+             ng-show="registerForm.userName.$error.required">
+             Your email is required.
+      </small>
+      <small class="error" 
+             ng-show="registerForm.userName.$error.pattern">
+             Please enter valid name.
+      </small>
+    </div>		    					    	
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Password*:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input ng-pattern="/^[a-zA-Z0-9*@#$%&*]+$/" id="password" name="password" ng-model="user.password" placeholder="Password" required autofocus type="password" class="form-control">
+							</div>		
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.password.$dirty && registerForm.password.$invalid">
+      <small class="error" 
+             ng-show="registerForm.password.$error.required">
+             Your password is required.
+      </small>
+      <small class="error" 
+             ng-show="registerForm.password.$error.pattern">
+             Please enter valid password.
+      </small>
+    </div>				    	
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Confirm Password*:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input ng-pattern="/^[a-zA-Z0-9*@#$%&*]+$/" id="confirmPass" name="confirmPass" placeholder="Confirm Password" required autofocus ng-model="confirmPass" type="password" class="form-control">
+							</div>		
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.confirmPass.$dirty && registerForm.confirmPass.$invalid">
+      <small class="error" 
+             ng-show="registerForm.confirmPass.$error.required">
+             Confirm password is required.
+      </small>
+      <small class="error" 
+             ng-show="registerForm.confirmPass.$error.pattern">
+             Please enter confirm valid password.
+      </small>
+    </div>				    	
+				  		</div>
+				  	<div class="row table_row_top_margin text-center">
+					<!-- <button class="btn btn-info" ng-click="backtoPage();">Back</button> -->
+					<a ng-show="showBack" class="btn btn-info" ng-href="#" role="button">Back</a>
+					<button class="btn btn-info">Save</button>
+					<button class="btn btn-info">Reset</button>
+				</div>
+			</form>	
+		</div>	
+		<div class="col-md-1 col-sm-1  col-xs-0"></div> 
+	</div>
+		    			    <script src="l10n/jsDatePick.jquery.full.1.3.js"></script>
+		<script>
+		new JsDatePick({
+			useMode:2,
+			target:"dateOfBirth",
+			dateFormat:"%m/%d/%Y",
+			 limitToFutur:true,
+		});
+		</script>

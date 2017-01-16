@@ -1,0 +1,97 @@
+<div class="row">
+		<div class="col-md-4 col-sm-4 col-xs-4"></div>
+		  <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">  
+             
+             
+             <form name="loginForm" id="loginForm" ng-submit="loginUser(loginForm)" ng-controller="LoginCtrl" novalidate="novalidate">
+                
+                   <div class="panel panel-default">
+   					   <div style="background-color:black;border-color:black;">
+      					 <!-- <h3 class="panel-title">
+         					{{item.formLabel}}
+                         </h3> -->
+                        </div>
+           
+          		<div class="panel-body">
+                     <div class="row table_row_top_margin">      
+                                  <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+							       	<label>{{attrs.label}}</label>			
+					      	      </div> -->							
+				    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                        <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">								
+					<input name="username" id="username" placeholder="Email Id" class="form-control"
+                	ng-model="user.userName" required autofocus type="text" ng-blur="validUsername();"></div>
+                 
+                                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+						    </div>
+						    
+						    <div class="row" style="margin-top:10px;">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+										<input name="loginPassword" id="psw" class="form-control" 
+                   type="password"
+                   placeholder="Password" 
+                   required 
+                   ng-model="user.password">
+							      </div>
+                                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+						    </div>
+						     <div id="showDropDown" class="row" style="display:none;margin-top:10px;">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+						 <select name="combo" id="combo" class="form-control" required>
+				  		 <option value="">Please select</option>
+				  		 </select>
+				  		
+							      </div>
+                                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+						    </div> 
+			         </div><!-- CTRL RENDER CLOSE -->                     
+                  
+                   </div>     
+                
+                   <div class="row table_row_bottom_margin table_row_top_margin text_center">
+						<div class="col-md-2 col-xs-2"></div>
+						<div class="col-md-7 col-xs-7" style="margin-left:60px;margin-top:10px;">
+							<button class="btn btn-primary">Login</button>
+						</div>
+						<!-- <div class="col-md-3 col-xs-3">
+							<button type="button" ng-click="cancel()" class="btn btn-info">Cancel</button>
+						</div> -->
+						<div class="col-md-3 col-xs-3"></div>
+					</div>
+					
+					 <!-- Panel body -->
+
+                  
+
+
+     </div>   <!-- PANEL  CLOSE --> 
+ </div>
+     </form>
+
+   </div> 
+		
+			
+	
+	
+	
+		<div class="col-md-4 col-sm-4 col-xs-4"></div>
+	
+	
+	
+	</div>
+	<div class="row">
+					 <div class="col-md-4 col-xs-4"></div>
+						<div class="col-md-4 col-xs-4">						
+					<div class="col-md-2 col-xs-2"></div>
+					<a ng-href="#registration">New playwriter? Create an account</a>
+					<div class="col-md-6 col-xs-6"></div>
+					<div class="col-md-2 col-xs-2"></div>
+					</div>
+					<div class="col-md-4 col-xs-4"></div>					
+                   
+        
+         </div>

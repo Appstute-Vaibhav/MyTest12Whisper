@@ -1,0 +1,285 @@
+<div id="veil" ng-show="isLoading"></div>
+<div id="feedLoading" ng-show="isLoading">
+<center>
+<img src='releases/master/images/loading.gif' style="height:160px;"/>
+</center>
+</div>				
+<div class="row" ng-hide="showToRegister" id="myList">
+<div class="col-md-1 col-sm-1 col-xs-1">				
+	</div>
+		<div class="col-md-10 col-sm-10 col-xs-10">
+		<div style="display:inline-flex;">
+		<span>
+		<input type="text" style="margin-top:8px;" placeholder="Search" ng-model="searchText" />
+		</span>
+		<h2 id="textName" style="margin-left:210px;margin-top:-2px;"></h2>
+		<span><input ng-if="roleId == 3" type="button" style="margin-left:285px;" class="btn btn btn-info" ng-click="addUserByAdmin();" value="Add New"/>
+		</span>
+		</div>
+	<!-- <a style="margin-left:610px;" class="btn btn-info" role="button" ng-href="#registration">Add New</a> -->			
+			   <table ng-table="tableParams"  class="table table-striped table-bordered bootstrap-datatable datatable">			   			   			  
+       				 <tr ng-repeat="item in $data | filter:searchText">            				
+            			<td data-title="'Name'" sortable="'firstName'">{{item.firstName}}</td>
+            				<td data-title="'Contact Number'">{{item.mobileNumber}}</td>
+            				<td data-title="'Email Id'">{{item.email}}</td>
+            				<td>
+							<input ng-if="roleId == 2 && item.status == 1" type="button" class="btn btn btn-info" ng-click="editTableRow(item.id)" value="Edit"/>                        	                     
+                            <input ng-if="roleId == 2 && (item.status == 0)" type="button" class="btn btn btn-info" ng-click="deleteUserRoleTableRow(item.id,1);" value="Unblock"/>
+                            <input ng-if="roleId == 2 && (item.status == 1)" type="button" class="btn btn btn-info" ng-click="deleteUserRoleTableRow(item.id,0);" value="Block"/>
+                                                       
+                            <input ng-if="roleId == 3 && item.status == 1" type="button" class="btn btn btn-info" ng-click="editTableRow(item.id)" value="Edit"/>
+                            <input ng-if="roleId == 3 && (item.status == 0)" type="button" class="btn btn btn-info" ng-click="deleteUserRoleTableRow(item.id,1);" value="Unblock"/>
+                            <input ng-if="roleId == 3 && (item.status == 1)" type="button" class="btn btn btn-info" ng-click="deleteUserRoleTableRow(item.id,0);" value="Block"/>
+                                                                                   
+                        </td>                            
+       				 </tr>       
+       				 <tr ng-show="emptiness">
+       				 <td></td>
+       				 <td>No data available</td>
+       				 <td></td>       				 
+       				 <td></td>
+       				 </tr>				 
+       		  </table>        		  
+       		  <!-- <div class="col-md-1 col-sm-1 col-xs-1">
+       		  <input style="margin-top:-150px;margin-left:756px;" ng-show="showButton" type="button" class="btn btn-danger" ng-click="deleteUserRoleTableRow();" value="Block Selected"/>
+       		  </div> -->
+		</div>
+		<div class="col-md-1 col-sm-1 col-xs-1">
+		
+	</div>
+	</div>
+	
+	<div class="row" ng-show="showToRegister">
+		<div class="col-md-1 col-sm-1  col-xs-0"></div>	
+		<div class="col-md-10 col-sm-10  col-xs-12">
+		<form ng-controller="RegisterUserCtrl">
+		<a style="margin-left:825px;margin-bottom:-15px;" id="asd" ng-show="showBack" class="btn btn-info" ng-href="#" role="button">Back</a>
+		<a style="margin-left:825px;margin-bottom:-15px;" ng-show="showCancel" class="btn btn-info" role="button" ng-click="showList();">Back</a></form>
+		<br>			  
+		  	<form role="form" name="registerForm" id="registerForm"  ng-submit="registerUser(registerForm)" ng-controller="RegisterUserCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading" id="changeTitle"></div>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-12 col-xs-12">
+				  				<div class="form-group" >
+				  	          		<label>First Name:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input maxlength="50" class="form-control" ng-pattern="/^[a-zA-Z]+$/" name="firstName" id="firstName" placeholder="First Name" ng-model="user.firstName" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.firstName.$dirty && registerForm.firstName.$invalid">
+    <small class="error" 
+        ng-show="registerForm.firstName.$error.required">
+        Please enter first name
+    </small>
+    <small class="error" 
+        ng-show="registerForm.firstName.$error.pattern">
+        Please enter valid first name
+    </small>
+    </div>			    		  	    
+				  		</div>
+				  		<div class="row table_row_top_margin">				  					
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<label>Last Name:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input maxlength="50" class="form-control" ng-pattern="/^[a-zA-Z]+$/" name="lastName" id="lastName" placeholder="Last Name" ng-model="user.lastName" required autofocus type="text" class="form-control">
+							</div>
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.lastName.$dirty && registerForm.lastName.$invalid">
+    <small class="error" 
+        ng-show="registerForm.lastName.$error.required">
+        Please enter last name
+    </small>
+    <small class="error" 
+        ng-show="registerForm.lastName.$error.pattern">
+        Please enter valid last name
+    </small>
+    </div>				
+						</div>
+				  		<div class="row table_row_top_margin">
+				  		<script>
+				  		function change(){				  		
+				  			$('#pickDate').hide();
+				  			if($('#dateOfBirth').val() == ''){
+				  				$('#dateOfBirth').attr('class','form-control ng-valid-pattern ng-touched ng-dirty ng-valid-parse ng-invalid ng-invalid-required');				  			
+				  			}else{
+				  				$('#dateOfBirth').attr('class','form-control ng-valid-pattern ng-touched ng-dirty ng-valid-parse ng-valid ng-valid-required');
+				  			}
+				  		}				  		
+				  		</script>
+				  						  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Date Of Birth:</label>
+				    		</div>			
+				    		<div class="col-md-3 col-sm-6 col-xs-12">
+								<input onchange="change();" readonly='true' name="dateOfBirth" id="dateOfBirth" placeholder="Date Of Birth" type="text" ng-model="user.dateOfBirth" class="input-xlarge form-control">																
+							</div>					    						
+    	<div class="error-container col-md-3 col-sm-6 col-xs-12"><small id="pickDate" ng-show="pickDate">Please select date of birth</small></div>    
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Contact Number:</label>				    			
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12" style="right:8px;">				    										
+								<div style="display:inline-flex;">
+								<span style="margin-right: 3px;margin-top: 4px;">+</span>
+								<input style="width:188px;" ng-minlength=10 ng-maxlength=12 name="mobileNumber" ng-pattern="/^[0-9]+$/" id="mobileNumber" placeholder="Contact Number" ng-model="user.mobileNumber" type="text" class="form-control" required autofocus></div>								
+							</div>
+												<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="registerForm.mobileNumber.$dirty && registerForm.mobileNumber.$invalid">
+    <small class="error" 
+        ng-show="registerForm.mobileNumber.$error.required">
+        Please enter contact number
+    </small>
+    <small class="error" 
+            ng-show="registerForm.mobileNumber.$error.minlength">
+            Your contact number is required to be 10 digits
+    </small>
+    <small class="error" 
+            ng-show="registerForm.mobileNumber.$error.maxlength">
+            Please enter valid contact number            
+    </small>
+    <small class="error" 
+        ng-show="registerForm.mobileNumber.$error.pattern">
+        Please enter numbers only
+    </small>
+    </div>				    	
+				  		</div>
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-3 col-sm-6 col-xs-12">
+				  				<label>Gender:</label>
+				  			</div>
+				  			<div class="col-md-3 col-sm-6 col-xs-12">
+					    		<select id="gender" name="gender" ng-model="user.gender" class="form-control" required>
+					    			<option value="">Please Select</option>
+					    			<option value="male">Male</option>
+					    			<option value="female">Female</option>
+					    			<option value="other">Other</option>
+					    		</select>
+					    	</div>
+					    	<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.gender.$dirty && registerForm.gender.$invalid">
+      <small class="error" 
+             ng-show="registerForm.gender.$error.required">
+             Please select gender
+      </small>
+      </div>
+				  		</div>
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Email Id:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input maxlength="100" ng-blur="validUsername();" name="email" ng-pattern='/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' id="email" placeholder="Email Id" ng-model="user.email" required autofocus  type="email" class="form-control">
+							</div>		
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.email.$dirty && registerForm.email.$invalid">
+      <small class="error" 
+             ng-show="registerForm.email.$error.required">
+             Please enter email id
+      </small><!-- 
+      <small class="error" 
+             ng-show="registerForm.email.$error.email">
+             Please enter a valid email.
+      </small> -->
+      <small class="error" 
+             ng-show="registerForm.email.$error.pattern">
+             Please enter a valid email id.
+      </small>
+    </div>		    	
+				  		</div>				  		
+				  		
+				  		<!-- <div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6 col-xs-12">
+				    			<label>Username:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input ng-blur="validUsername();" maxlength="45" ng-disabled="editable" ng-pattern="/^[a-zA-Z0-9]+$/" id="userName" name="userName" placeholder="Username" required autofocus ng-model="user.userName" type="text" class="form-control">
+							</div>
+										<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.userName.$dirty && registerForm.userName.$invalid">
+      <small class="error" 
+             ng-show="registerForm.userName.$error.required">
+             Please enter username
+      </small>
+      <small class="error" 
+             ng-show="registerForm.userName.$error.pattern">
+             Please enter valid username
+      </small>
+    </div> 
+				  		</div> -->		    					    	
+				  		<div class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label for="password">Password:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input maxlength="45" minlength="3" ng-disabled="editable" id="password" name="password" ng-model="password" placeholder="Password" required autofocus type="password" class="form-control">								 
+							</div>	
+							<ul  id="strength" check-strength="password"></ul> 	
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.password.$dirty && registerForm.password.$invalid">
+      <small class="error" 
+             ng-show="registerForm.password.$error.required">
+             Please enter password
+      </small>
+      <small class="error" 
+             ng-show="registerForm.password.$error.minlength">
+             Please enter minimum 3 characters.
+      </small>
+      <small class="error" 
+             ng-show="registerForm.password.$error.pattern">
+             Please enter valid password
+      </small>
+    </div>				    	
+				  		</div>
+				  		<div ng-hide="editable"  class="row table_row_top_margin">				  				  				
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Confirm Password:</label>
+				    		</div>	    	
+				    		<div class="col-md-3 col-sm-6  col-xs-12">
+								<input maxlength="45" minlength="3" ng-pattern="/^[a-zA-Z0-9*@#$%&*]+$/" id="confirmPass" name="confirmPass" placeholder="Confirm Password" required autofocus ng-model="confirmPass" type="password" class="form-control">
+							</div>		
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+         ng-show="registerForm.confirmPass.$dirty && registerForm.confirmPass.$invalid">
+      <small class="error" 
+             ng-show="registerForm.confirmPass.$error.required">
+             Please enter confirm password
+      </small>
+      <small class="error" 
+             ng-show="registerForm.confirmPass.$error.minlength">
+             Please enter minimum 3 characters.
+      </small>
+      <small class="error" 
+             ng-show="registerForm.confirmPass.$error.pattern">
+             Please enter valid confirm password
+      </small>
+    </div>				    	
+				  		</div>
+				  	<div class="row table_row_top_margin text-center">
+				  	<div>				    			
+				    		</div>	    	
+				    		<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:-10px;">					
+					<button class="btn btn-info" id="saveBtn">Save</button>
+					<a id="resetForm" class="btn btn-info" ng-hide="hideReset" role="button" ng-click="reset(true);">Reset</a>					
+							</div>										
+				</div>
+			</form>	
+		</div>	
+		<div class="col-md-1 col-sm-1  col-xs-0">		
+		</div> 
+	</div>
+	
+	
+<script>
+$("#dateOfBirth").datepicker({ 
+                      showOn: "both",
+                        dateFormat:'yy-mm-dd', 
+                        changeYear: true, 
+                        changeMonth: true, 
+                        yearRange: "1900:"+ new Date().getFullYear(), 
+                        maxDate:new Date(), });
+</script> 

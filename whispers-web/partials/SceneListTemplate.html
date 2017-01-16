@@ -1,0 +1,555 @@
+<div id="veil" ng-show="isLoading"></div>
+<div id="feedLoading" ng-show="isLoading">
+<center>
+<img src='releases/master/images/loading.gif' style="height:160px;"/>
+</center>
+</div>
+  <div class="row" ng-hide="form">
+		<div class="col-md-1 col-sm-1 col-xs-1"></div>
+		<div class="col-md-10 col-sm-10 col-xs-10">
+		<div style="display:inline-flex;">
+		<span>
+		<input type="text" style="margin-top:8px;" placeholder="Search" ng-model="serachText" />
+		</span>
+		<h2 id="textName" style="margin-left:210px;margin-top:-2px;"></h2>
+		<span style="margin-left:330px;">
+		<input ng-hide="toPlayWriter" type="button" class="btn btn btn-info" ng-click="addScene();" value="Add New"/>		
+		</span>
+		</div>
+	 <!-- <a style="margin-left:610px;" class="btn btn-info" role="button" ng-href="">Add New</a> --> 
+			   <table ng-table="tableParams"  class="table table-striped table-bordered bootstrap-datatable datatable">
+			   <thead>
+			   <tr>
+			   <th>Submitted Date</th>
+			   <th ng-hide="toAdmin">Submitted By</th>
+			   <th>Scene Name</th>
+			   <th></th>
+			   <th ng-hide="toAdmin"></th>
+			   <th ng-hide="toPlayWriter"></th>			   				   	   			 
+			   </tr>
+			   </thead>			   
+       				 <tr ng-repeat="item in $data | filter:serachText">            				
+            				<td sortable="'dateSubmitted'">{{item.dateSubmitted}}</td>
+            				<td ng-hide="toAdmin"> {{item.submittedByName}} </td>
+            				<td>{{item.sceneTitle}}</td>            				
+								<td>
+								<input ng-hide="toPlayWriter" ng-if="item.isSubmitted == 0" type="button" class="btn btn btn-info" ng-click="editTableRow(item.id,1);" value="Review and Edit" value="Review and Edit"/>								
+								<input ng-if="item.isSubmitted == 1" type="button" class="btn btn btn-info" ng-click="editTableRow(item.id,0);" value="View Scene" value="View Scene"/>								
+								<a ng-hide="toPlayWriter" ng-if="item.isSubmitted == 0" style="font-size:10px;" ng-click="deleteScene(item.id);" class="btn btn-info btn-lg">																
+          						<span class="glyphicon glyphicon-trash"></span> 
+        						</a>
+        						<a ng-hide="toAdmin" ng-if="item.publishDate == '-'" style="font-size:10px;" ng-click="deleteScene(item.id);" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-trash"></span></a>
+        <input ng-if="item.scenePublished == 1" type="button" class="btn btn btn-info" ng-click="getComments(item.id);" value="View Comments" value="View Comments"/>
+        </td>
+        <td ng-hide="toPlayWriter">
+        <label ng-if="item.allowComments == 1">
+        <input checked="true" disabled="disabled" type="checkbox" id="allowComments" value={{item.id}}> Allow Comments 
+    </label>
+    <label ng-if="item.allowComments == 0">
+        <input type="checkbox" id="allowComments" value={{item.id}}> Allow Comments 
+    </label>          
+		<br>
+        <input ng-if="item.isSubmitted == 0" type="button" class="btn btn btn-info" ng-click="submitScene(item);" value="Submit" value="Submit"/>        
+		</td>						                    
+		<td ng-hide="toAdmin" ng-if="item.scenePublished == 0 && item.publishDate != '-'">
+								<!-- <input ng-hide="gotPublished" type="button" class="btn btn btn-info" ng-click="publishScene(item.id);" value="Publish" value="Publish"/> -->
+								<input checked="true" type="checkbox" id="{{item.id}}" ng-click="publishScene(item.id);"> {{item.publishDate}}
+								<br>(UnCheck to UnPublish)								
+								</td>
+								<td ng-hide="toAdmin" ng-if="item.scenePublished == 0 && item.publishDate == '-'">
+								<!-- <input ng-hide="gotPublished" type="button" class="btn btn btn-info" ng-click="publishScene(item.id);" value="Publish" value="Publish"/> -->
+								<input type="checkbox" id="{{item.id}}" ng-click="publishScene(item.id);">
+								<br>(Check to Publish)								
+								</td>
+								<td ng-hide="toAdmin" ng-if="item.scenePublished == 1 && item.publishDate != '-'" style="width:186px;">
+								<label ng-hide="toAdmin">Published on {{item.publishDate}}</label>
+								</td>        
+       		</tr>       			
+       		<tr ng-show="emptiness">
+       				 <td></td>
+       				 <td>No data available</td>
+       				 <td></td>
+       				 <td></td>
+       				 </tr>	 
+      </table>        		         		         		       		  
+		</div>
+		<div class="col-md-1 col-sm-1 col-xs-1">
+		
+	</div>
+	</div>
+	
+	<div class="row" ng-show="form">
+	<div class="col-md-1 col-sm-1  col-xs-0"></div>	
+		<div class="col-md-10 col-sm-10  col-xs-12">	
+		<form ng-controller="SceneListCtrl"><a id="urlText" style="margin-left:825px;margin-bottom:-15px;" ng-show="showCancel" class="btn btn-info" role="button" ng-click="showList();">Back</a></form>
+		<br>  		
+		  	<form role="form" name="sceneForm" id="sceneForm" ng-controller="SceneListCtrl" novalidate="novalidate">
+		  		<div class="panel panel-info">
+				    <div class="panel-heading" id="sName"></div>
+		 <script>
+			function change(no){			
+				if($('#whisper12').val() == ""){		
+					$('#hideButton').html("<button class='btn btn-info' onclick='nextWhisper("+no+");'>Add next whisper</button>");
+				}					
+			}
+		</script>
+		
+		<script>
+		function nextWhisper(no){			
+			if(no == 12){
+				$('#hideButton').html("");							
+			}else{
+				$('#hideButton').html("<button class='btn btn-info' onclick='nextWhisper("+(no + 1)+");'>Add next whisper</button>");	
+			}
+			
+			$('#whisp'+no).show();
+			/* if($('#whisper'+(no - 1)).val().length >= 1){
+				$('#whisp'+no).show();				
+			}else{				
+				for(;no<=12;no++){
+					$('#whisp'+no).hide();
+					$('#whisper'+no).val('');
+				}
+			} */
+		}		
+		</script>
+		
+			<script>
+		function checkWhisper(no){
+			if($('#whisper'+no).val() == ""){
+				$('#character'+no).val("");
+				///$('#stageDirection'+no).val("");
+			}			
+		}		
+		</script>
+				    <div class="panel-body">
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-2 col-sm-4 col-xs-8">
+				  				<div class="form-group" >
+				  	          		<label>Title:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input maxlength="200" class="form-control width-250" name="title" id="title" ng-model="scene.sceneTitle" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.title.$dirty && sceneForm.title.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.title.$error.required">
+        Please enter title.
+    </small>
+    <!-- <small class="error" 
+        ng-show="sceneForm.title.$error.pattern">
+        Please enter valid title.
+    </small> -->
+    </div>			    		  	    
+				  		</div>
+				  		<div class="row table_row_top_margin">
+				  			<div class="col-md-2 col-sm-4 col-xs-8">
+				  				<div class="form-group" >
+				  	          		<label>Author Name:</label>	
+						    	</div>
+						    </div>
+						    <div class="col-md-3 col-sm-6 col-xs-12" style="display:inline-flex">	
+						    <input maxlength="200" class="form-control width-250" name="authorName" id="authorName" ng-model="scene.authorName" type="text" class="form-control" required autofocus />				    						    						    							    						   				    					    						   						    
+						    </div>
+						    <!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.authorName.$dirty && sceneForm.authorName.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.authorName.$error.required">
+        Please Author Name.
+    </small>
+    <small class="error" 
+        ng-show="sceneForm.authorName.$error.pattern">
+        Please enter valid title.
+    </small>
+    </div> -->			    		  	    
+				  		</div>
+				  		<div class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+								<label>Time & Place:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<textarea type="text" maxlength="140" class="form-control width-250" ng-trim="false" name="timeAndPlace" id="timeAndPlace" ng-model="scene.timePlace" required autofocus></textarea>							
+							</div>
+							<small>{{140 - scene.timePlace.length}} left</small>
+							<div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.timeAndPlace.$dirty && sceneForm.timeAndPlace.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.timeAndPlace.$error.required">
+        Please enter time & place.
+    </small>    
+    </div>				
+		</div>
+			  		<div class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+								<label>Whisper/Description:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6 col-xs-12">
+								<input type="text" name="character1" id="character1" ng-model="sceneDesc.character1" placeholder="Enter Character Name" class="form-control width-250">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea maxlength="140" ng-trim="false" maxlength="140" placeholder="Enter Whisper" class="form-control width-250" name="whisper1" id="whisper1" ng-model="sceneDesc.whisper1" required autofocus class="form-control"></textarea>								
+								<small>{{140 - sceneDesc.whisper1.length}} left</small>
+							</div>																			
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input class="stageDirection" type="checkbox" ng-model="stageDirection[1]" id="stageDirection1" value=1> Add as a stage direction
+								<!-- <textarea onkeyup="checkWhisper(1);"  name="stageDirection1" id="stageDirection1" ng-model="sceneDesc.stageDirection1" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+							<div style="margin-left:665px;" class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper1.$dirty && sceneForm.whisper1.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper1.$error.required">
+        Please enter whisper.
+    </small>       
+    </div>				
+		</div>
+		<div id="whisp2" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character2" id="character2" ng-model="sceneDesc.character2" placeholder="Enter Character Name" type="text" class="form-control width-250">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea (3);" ng-trim="false" maxlength="140" class="width-250 form-control" placeholder="Enter Whisper" name="whisper2" id="whisper2" ng-model="sceneDesc.whisper2" autofocus class="form-control"></textarea>								
+								<small>{{140 - sceneDesc.whisper2.length}} left</small>						
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection2" ng-model="stageDirection[2]"  value=2> Add as a stage direction
+								<!-- <textarea name="stageDirection2" id="stageDirection2" ng-model="sceneDesc.stageDirection2" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper2.$dirty && sceneForm.whisper2.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper2.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>		
+		<div id="whisp3" style="display:none;"  class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character3" id="character3" ng-model="sceneDesc.character3" placeholder="Enter Character Name" type="text" class="form-control width-250">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" placeholder="Enter Whisper" name="whisper3" id="whisper3" ng-model="sceneDesc.whisper3" autofocus class="form-control"></textarea>								
+								<small>{{140 - sceneDesc.whisper3.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection3" value=3 ng-model="stageDirection[3]"> Add as a stage direction
+								<!-- <textarea name="stageDirection3" id="stageDirection3" ng-model="sceneDesc.stageDirection3" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+							
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper3.$dirty && sceneForm.whisper3.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper3.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp4" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character4" id="character4" ng-model="sceneDesc.character4" placeholder="Enter Character Name" type="text" class="form-control width-250">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" placeholder="Enter Whisper" name="whisper4" id="whisper4" ng-model="sceneDesc.whisper4" autofocus class="form-control"></textarea>								
+								<small>{{140 - sceneDesc.whisper4.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection"  type="checkbox" id="stageDirection4" value=4 ng-model="stageDirection[4]"> Add as a stage direction
+								<!-- <textarea name="stageDirection4" id="stageDirection4" ng-model="sceneDesc.stageDirection4" class="form-control width-250" autofocus></textarea> -->								
+							</div>							
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper4.$dirty && sceneForm.whisper4.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper4.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp5" style="display:none;"  class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character5" id="character5" ng-model="sceneDesc.character5" type="text" class="form-control width-250" placeholder="Enter Character Name">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" name="whisper5" id="whisper5" placeholder="Enter Whisper"  ng-model="sceneDesc.whisper5" autofocus class="form-control"></textarea>
+								<small>{{140 - sceneDesc.whisper5.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection5" value=5 ng-model="stageDirection[5]"> Add as a stage direction
+								<!-- <textarea name="stageDirection5" id="stageDirection5" ng-model="sceneDesc.stageDirection5" class="form-control width-250" autofocus ></textarea> -->								
+							</div>
+							
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper5.$dirty && sceneForm.whisper5.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper5.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp6" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character6" id="character6" ng-model="sceneDesc.character6" type="text" class="form-control width-250" placeholder="Enter Character Name">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" placeholder="Enter Whisper" class="form-control width-250" name="whisper6" id="whisper6" ng-model="sceneDesc.whisper6" autofocus class="form-control"></textarea>								
+								<small>{{140 - sceneDesc.whisper6.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection6" value=6 ng-model="stageDirection[6]"> Add as a stage direction
+								<!-- <textarea name="stageDirection6" id="stageDirection6" ng-model="sceneDesc.stageDirection6" class="form-control width-250" autofocus></textarea> -->															
+							</div>
+							
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper6.$dirty && sceneForm.whisper6.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper6.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp7" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character7" id="character7" ng-model="sceneDesc.character7" type="text" placeholder="Enter Character Name" class="form-control width-250">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" placeholder="Enter Whisper" name="whisper7" id="whisper7" ng-model="sceneDesc.whisper7" autofocus class="form-control"></textarea>
+								<small>{{140 - sceneDesc.whisper7.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection7" value=7 ng-model="stageDirection[7]"> Add as a stage direction
+								<!-- <textarea name="stageDirection7" id="stageDirection7" ng-model="sceneDesc.stageDirection7" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+														
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper7.$dirty && sceneForm.whisper7.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper7.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp8" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character8" id="character8" ng-model="sceneDesc.character8" type="text" class="form-control width-250" placeholder="Enter Character Name">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" name="whisper8" id="whisper8" placeholder="Enter Whisper" ng-model="sceneDesc.whisper8" autofocus class="form-control"></textarea>
+								<small>{{140 - sceneDesc.whisper8.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection8" value=8 ng-model="stageDirection[8]"> Add as a stage direction
+								<!-- <textarea name="stageDirection8" id="stageDirection8" ng-model="sceneDesc.stageDirection8" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+														
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper8.$dirty && sceneForm.whisper8.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper8.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp9" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character9" id="character9" ng-model="sceneDesc.character9" type="text" class="form-control width-250" placeholder="Enter Character Name">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" name="whisper9" id="whisper9" placeholder="Enter Whisper" ng-model="sceneDesc.whisper9" autofocus class="form-control"></textarea>
+								<small>{{140 - sceneDesc.whisper9.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection9" value=9 ng-model="stageDirection[9]"> Add as a stage direction
+								<!-- <textarea name="stageDirection9" id="stageDirection9" ng-model="sceneDesc.stageDirection9" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+														
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper9.$dirty && sceneForm.whisper9.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper9.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp10" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character10" id="character10" ng-model="sceneDesc.character10" type="text" class="form-control width-250" placeholder="Enter Character Name">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" name="whisper10" id="whisper10" placeholder="Enter Whisper" ng-model="sceneDesc.whisper10" autofocus class="form-control"></textarea>
+								<small>{{140 - sceneDesc.whisper10.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection10" value=10 ng-model="stageDirection[10]"> Add as a stage direction
+								<!-- <textarea name="stageDirection10" id="stageDirection10" ng-model="sceneDesc.stageDirection10" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+														
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper10.$dirty && sceneForm.whisper10.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper10.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp11" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character11" id="character11" ng-model="sceneDesc.character11" type="text" class="form-control width-250" placeholder="Enter Character Name">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" class="form-control width-250" name="whisper11" id="whisper11" placeholder="Enter Whisper" ng-model="sceneDesc.whisper11" autofocus class="form-control"></textarea>
+								<small>{{140 - sceneDesc.whisper11.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection11" value=11 ng-model="stageDirection[11]"> Add as a stage direction
+								<!-- <textarea name="stageDirection11" id="stageDirection11" ng-model="sceneDesc.stageDirection11" class="form-control width-250" autofocus></textarea> -->								
+							</div>
+														
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper11.$dirty && sceneForm.whisper11.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper11.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		
+		<div id="whisp12" style="display:none;" class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input name="character12" id="character12" placeholder="Enter Character Name" ng-model="sceneDesc.character12" type="text" class="form-control width-250">								
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea ng-trim="false" maxlength="140" placeholder="Enter Whisper" class="form-control width-250" name="whisper12" id="whisper12" ng-model="sceneDesc.whisper12" autofocus class="form-control"></textarea>								
+								<small>{{140 - sceneDesc.whisper12.length}} left</small>
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+							<input class="stageDirection" type="checkbox" id="stageDirection12" value=12 ng-model="stageDirection[12]"> Add as a stage direction
+								<!-- <textarea name="stageDirection12" id="stageDirection12" ng-model="sceneDesc.stageDirection12" class="form-control width-250" autofocus></textarea> -->								
+							</div>							
+							<!-- <div class="error-container col-md-3 col-sm-6 col-xs-12" 
+        ng-show="sceneForm.whisper12.$dirty && sceneForm.whisper12.$invalid">
+    <small class="error" 
+        ng-show="sceneForm.whisper12.$error.required">
+        Please enter whisper.
+    </small>       
+    </div> -->				
+		</div>
+		<!-- <div ng-repeat="whisper in whispers" id="space-for-whispers">
+		<div class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+								<label></label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<input type="text"  ng-trim="false" maxlength="140" class="form-control" name="" id="" ng-model="whisper.value" required autofocus class="form-control">								
+							</div>
+							<small>{{140 - whisper.whisper.length}} left</small>							
+		</div>
+		</div> -->
+		<div style="margin-left: 655px;margin-top: 5px;" id="hideButton">
+		<button class='btn btn-info'  onclick="nextWhisper(2);">Add The Next Whisper</button>
+		
+		</div>
+		<div ng-hide="toPlayWriter" class="row table_row_top_margin" style="margin-left: 145px;margin-bottom: -25px;">
+		<span><h6>Please upload image with file extensions .jpeg or .png</h6></span>		
+		</div>
+		<div class="row table_row_top_margin">				  					
+							<div ng-hide="hideImg" class="col-md-2 col-sm-4 col-xs-8">
+							<label>Upload Graphics:</label>
+							</div>
+							<div ng-hide="hideImg" class="col-md-3 col-sm-6  col-xs-12">
+							<input onchange="angular.element(this).scope().addImage()" id="img" type="file" accept="image/*" />    						
+							</div>
+							<span id="cardErrorMsg" name="cardErrorMsg" style="color:red;"></span>
+							<div id="imgPreview" class="col-sm-2 text-right">
+    						<table style="border:hidden;">
+        					<tr>
+            				<td>
+                			<div>
+                    			<img style="max-width:400px;" id="imagePreview0" src="" alt="" />
+                			</div>
+            				</td>
+        					</tr>
+    						</table>
+    <!-- <button ng-click="addImage()" type="button">ADD</button> -->
+</div>
+</div>						
+		<div class="row table_row_top_margin">				  					
+							<div class="col-md-2 col-sm-4 col-xs-8">
+								<label>Notification:</label>									
+							</div>
+							<div class="col-md-3 col-sm-6  col-xs-12">
+								<textarea type="text" maxlength="200" class="form-control width-250" name="notification" id="notification" ng-model="scene.notificationText" autofocus style="/* margin: 0px -482.53125px 0px 0px; */ height: 80px; width: 675px;"></textarea>								
+							</div>												
+	</div>			
+		<!-- <div class="row table_row_top_margin">
+				  		<script>
+				  		function hideDate(){
+				  			$('#pickDate').hide();
+							if($('#dateUploaded').val() == ''){
+				  				$('#publishDate').attr('class','form-control ng-valid-pattern ng-touched ng-dirty ng-valid-parse ng-invalid ng-invalid-required');				  			
+				  			}else{
+				  				$('#publishDate').attr('class','form-control ng-valid-pattern ng-touched ng-dirty ng-valid-parse ng-valid ng-valid-required');
+				  			}
+				  		}				  		
+				  		</script>				  						  				  			
+			 				<div class="col-md-3 col-sm-6  col-xs-12">
+				    			<label>Notification Publish Date:</label>
+				    		</div>			
+				    		<div class="col-md-3 col-sm-6 col-xs-12">
+								<input onchange="hideDate();" readonly='true' name="publishDate" id="publishDate" type="text" ng-model="scene.publishDate" class="input-xlarge form-control">																
+							</div>					    						
+    					<div class="error-container col-md-3 col-sm-6 col-xs-12"><small id="pickDate" ng-show="pickDate">Please select publish date</small></div>    
+				  		</div>						
+		 -->
+		 		  	<div class="row table_row_top_margin text-center">
+				  	<div class="col-md-2 col-sm-4  col-xs-8">															
+							</div>										
+							<div class="col-md-3 col-sm-6  col-xs-12" style="margin-top:-10px;">							
+					<button ng-hide="hideSave" class="btn btn-info" ng-click="saveScene(sceneForm);">Save</button>
+					<button id="resetForm"  class="btn btn-info" ng-click="reset();" ng-hide="hideReset">Reset</button>					
+					</div>
+				</div>
+			</form>	
+		</div>	
+		<div></div>
+	<!-- <script>
+		$("#publishDate").datepicker({
+						showOn: "both",					
+						dateFormat:'yy-mm-dd',     
+						minDate:new Date()
+					});
+</script> -->				
+	</div>
+
