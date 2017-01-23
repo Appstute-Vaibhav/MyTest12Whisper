@@ -1,11 +1,2 @@
 version: 0.0
 os: linux
-files:
-hooks:
-  ApplicationStop:
-
-  BeforeInstall:
-
-  ApplicationStart:
-
-  ValidateService:
