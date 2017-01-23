@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: ./whispers-web/WEB-INF/web.xml
+    destination: /tmp/MyAppWhisper/
+  - source: ./Whispers/src/main/webapp/WEB-INF/web.xml
+    destination: /tmp/MyAppWhisper/
+hooks:
+  ApplicationStop:
+
+  BeforeInstall:
+
+  ApplicationStart:
+
+  ValidateService:
